@@ -4,31 +4,60 @@
 [![Docker Certified](https://img.shields.io/badge/docker-ready-blue.svg)](https://www.docker.com/)
 [![Testing Framework](https://img.shields.io/badge/test-pytest-green.svg)](https://docs.pytest.org/)
 
-Kerangka kerja (framework) berbasis komponen modular dan arsitektur berorientasi objek (OOP) tingkat tinggi untuk standardisasi pipeline data telemetri di lingkungan manufaktur. Proyek ini mengimplementasikan pembatasan arsitektur menggunakan **Abstract Base Classes (ABC)** untuk menjamin konsistensi hulu-ke-hilir, serta dilengkapi dengan enkapsulasi ganda dan metode *debugging/logging reflection* standar industri cloud.
+Kerangka kerja (framework) berbasis komponen modular skala besar menggunakan **Repository Design Pattern** dan arsitektur berorientasi objek (OOP) tingkat tinggi untuk standardisasi pipeline data di lingkungan manufaktur modern. Proyek ini mengimplementasikan pembatasan arsitektur menggunakan **Abstract Base Classes (ABC)** untuk menjamin konsistensi integrasi multi-studi kasus.
 
 ---
 
 ## 🏗️ Arsitektur & Pola Desain
 
-Proyek ini dibangun di atas tiga pilar utama konsep OOP Python modern:
-1. **Callable Objects (`__call__`):** Mengubah kelas pemroses menjadi entitas yang dapat dieksekusi langsung sebagai fungsi tunggal untuk efisiensi perulangan data streaming (Kafka/CDC).
-2. **Object Logging Standard (`__str__` vs `__repr__`):** Memberikan transparansi mutlak pada status parameter internal objek ketika terjadi kegagalan (*crash*) pada klaster produksi cloud (Databricks).
-3. **Abstraksi Ketat (`BaseDataPipeline`):** Mengunci arsitektur tim agar patuh pada tiga serangkai metode standar industri: `.extract()`, `.transform()`, dan `.load()`.
+Proyek ini menggunakan kombinasi dua pola desain utama untuk mengelola kompleksitas data:
+1. **Repository Design Pattern (`BaseDataRepository`):** Memisahkan logika bisnis pengolahan data dengan detail teknis penyerapan dari hulu database/sensor. Mengunci kontrak tiga serangkai metode wajib: `.fetch_all()`, `.process_data()`, dan `.save()`.
+2. **Facade/Orchestrator Pattern (`ProductionPipeline`):** Bertindak sebagai jembatan terpusat tunggal yang merajut dan mengeksekusi berbagai domain studi kasus yang tersebar di sub-folder.
 
 ---
 
-## 📂 Struktur Direktori Proyek
+## 📂 Struktur Direktori Proyek (Modular & Skala Besar)
+
+Struktur di bawah ini menerapkan **Prinsip Cermin (1-to-1 Mapping)** antara folder sumber daya (`src/`) dan folder pengujian unit berdasarkan nama domain studi kasus, serta menyediakan ruang untuk ekspansi pengujian multi-layer.
 
 ```text
 .
-├── src/
-│   ├── base_pipeline.py            # Kelas induk abstrak (ABC) & Template Method Pattern
-│   ├── cnc_pipeline_component.py   # Kelas anak realisasi konkrit pemrosesan telemetri
-│   └── pipeline.py                 # Orkestrator utama (Production Pipeline Facade)
-├── tests/
-│   └── test_base_pipeline.py       # Unit testing pengunci arsitektur OOP & fail-early system
-├── Dockerfile                      # Image build berbasis python:3.11-slim
-├── docker-compose.yml              # Konfigurasi lingkungan terisolasi dengan volume mapping
-├── main.py                         # Titik awal eksekusi aplikasi (Bootstrap Pattern)
-├── README.md                       # Dokumentasi teknis proyek
-└── requirements.txt                # Pustaka ketergantungan (PyTest & PyTest-Mock)
+├── src/                               # 🚀 LOGIKA UTAMA PRODUKSI
+│   ├── __init__.py
+│   ├── base_repository.py             # Kelas induk abstrak (ABC) untuk Repository Pattern
+│   │
+│   ├── cnc_telemetry/                 # 🔹 Domain Studi Kasus 1: Sinyal Mesin CNC
+│   │   ├── __init__.py
+│   │   ├── cnc_repository.py          # Sinkronisasi data hulu-hilir CNC
+│   │   └── cnc_transformer.py         # Modul rumus matematika/kalibrasi sensor CNC
+│   │
+│   ├── kafka_ingestion/               # 🔹 Domain Studi Kasus 2: Data Antrean Kafka (Eskalasi)
+│   │   ├── __init__.py
+│   │   └── kafka_repository.py
+│   │
+│   └── pipeline.py                    # 🎛️ Jembatan Terpusat (Orkestrator Utama / Facade)
+│
+├── tests/                             # 🧪 PIRAMIDA PENGUJIAN OTOMATIS
+│   ├── __init__.py
+│   │
+│   ├── unit/                          # 📦 LAPISAN 1: UNIT TESTING (Isolasi Fungsi)
+│   │   ├── __init__.py
+│   │   ├── cnc_telemetry/             # Cerminan Sempurna Domain Studi Kasus 1
+│   │   │   ├── test_cnc_repository.py
+│   │   │   └── test_cnc_transformer.py
+│   │   │
+│   │   └── kafka_ingestion/           # Cerminan Sempurna Domain Studi Kasus 2
+│   │       └── test_kafka_repository.py
+│   │
+│   ├── integration/                   # 🔗 LAPISAN 2: INTEGRATION TESTING (Hubungan Antar Modul)
+│   │   ├── __init__.py
+│   │   └── test_pipeline_jembatan.py  # Memastikan interaksi antar-repo di pipeline.py sinkron
+│   │
+│   └── e2e/                           # 🌐 LAPISAN 3: END-TO-END TESTING (Simulasi Aliran Penuh)
+│       ├── __init__.py
+│       └── test_full_etl_flow.py      # Menguji aliran data nyata dari raw data hingga masuk ke Storage Cloud
+│
+├── Dockerfile                         # Image build berbasis python:3.11-slim
+├── docker-compose.yml                 # Konfigurasi lingkungan terisolasi dengan volume mapping
+├── main.py                            # Titik awal eksekusi aplikasi (Bootstrap Pattern - Tetap Suci)
+└── requirements.txt                   # Pustaka ketergantungan (PyTest & PyTest-Mock)
