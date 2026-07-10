@@ -45,7 +45,7 @@ class TestCncTelemetryRepository:
         """
         class RepositoryCacat(BaseDataRepository):
             def exct_raw_data(self): return []
-            def tsrf_clean_data(self, data): return data
+            def trsf_clean_data(self, data): return data
             # load_final_data sengaja dikosongkan/lupa ditulis
         
         with pytest.raises(TypeError) as info_error:

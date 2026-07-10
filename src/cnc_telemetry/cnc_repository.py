@@ -26,7 +26,7 @@ class CncRepository(BaseDataRepository):
         # Simulasi data mentah: Ada data normal, data None (rusak), dan data normal lagi
         return [38.5, None, 40.2, None, 41.8]
     
-    def tsrf_clean_data(self, raw_data: list) -> list:
+    def trsf_clean_data(self, raw_data: list) -> list:
         """
         Kategori: TRANSFORM
         Melakukan pembersihan data ganda (Imputasi) + Kalibrasi nilai offset fisik.
