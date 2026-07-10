@@ -34,7 +34,7 @@ class TestCncTelemetryRepository:
         )
         raw_data_dummy = [38.5, None, 40.2]
         data_calibrated_expectation = [40.0, 25.0, 41.7]
-        actual_data = repo.tsrf_clean_data(raw_data_dummy)
+        actual_data = repo.trsf_clean_data(raw_data_dummy)
         # Memastikan hasil perhitungan matematis 100% akurat
         assert actual_data == data_calibrated_expectation
     
