@@ -2,7 +2,8 @@ name: CI Process
 on:
   push:
     branches: [main, ian-dev]
-  pull_request: [main]
+  pull_request: 
+    branches: [main]
 jobs:
   quality-assurance:
     runs-on: 
@@ -12,12 +13,12 @@ jobs:
       - name: Downoad Source Code
         uses: actions/checkout@v4
       # Langkah 2: Install bahasa Python di dalam server komputer virtual tersebut
-      - name: Install Python 3.11
+      - name: Set up Python 3.11
         uses: actions/setup-python@v5 
         with:
           python-version: 3.11
           # Mengaktifkan fitur cache agar proses install library di running berikutnya berjalan kilat
-          cache: pip
+          cache: "pip"
       # Langkah 3: Install library pihak ketiga yang dibutuhkan untuk pengujian
       - name: Install Library
         run: |
