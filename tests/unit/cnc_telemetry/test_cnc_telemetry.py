@@ -28,7 +28,7 @@ class TestCncTelemetryRepository:
         """
         # Inisialisasi dengan parameter uji khusus
         repo = CncRepository(
-            mahine_id="CNC-01",
+            machine_id="CNC-01",
             default_value=25.0,
             offset=1.5
         )
