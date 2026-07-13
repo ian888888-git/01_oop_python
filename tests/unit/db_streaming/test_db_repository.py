@@ -24,7 +24,7 @@ class TestDbStreamingRepository:
                 "order_id": 88,
                 "amount": 8000.0,
                 "status": " failed ",
-                "costumer_email": "ardian.webi@gmail.com"
+                "customer_email": "ardian.webi@gmail.com"
             }
         ]
 
@@ -34,14 +34,14 @@ class TestDbStreamingRepository:
                 "order_id":88,
                 "amount": 8000.0,
                 "status": "FAILED",                # Harus bersih dari spasi & kapital
-                "costumer_email": "a**********@gmail.com"  # Karakter ke-2 dan seterusnya diganti bintang
+                "customer_email": "a**********@gmail.com"  # Karakter ke-2 dan seterusnya diganti bintang
             }
         ]
 
         hasil_aktual = repo.trsf_clean_data(raw_data_dummy)
         # Memastikan output transformasi 100% cocok dengan ekspektasi bisnis
         assert hasil_aktual == ekspektasi_hasil
-    
+
     def test_helper_masking_email(self):
         """
         Menguji ketahanan fungsi private _apply_email_masking jika menerima

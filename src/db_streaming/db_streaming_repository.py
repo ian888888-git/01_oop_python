@@ -29,13 +29,13 @@ class DbStreamingRepository(BaseDataRepository):
                 "order_id":1001,
                 "amount":100000.00,
                 "status":"pending",
-                "costumer_email":"murayama@example.com"
+                "customer_email":"murayama@example.com"
             },
                         {
                 "order_id":1002,
                 "amount":200000.00,
                 "status":"SUCCESS",
-                "costumer_email":"toyama@example.com"
+                "customer_email":"toyama@example.com"
             }
         ]
     
@@ -52,8 +52,8 @@ class DbStreamingRepository(BaseDataRepository):
             # 1. Standardisasi Status: Hapus spasi di ujung-ujung (.strip()) + Paksa huruf besar (.upper())
             clean_record["status"] = clean_record["status"].strip().upper()
             # 2. Data Masking Email: Ubah "ardian.webi@gmail.com" -> "a*****@gmail.com"
-            raw_email = clean_record["costumer_email"]
-            clean_email = self._apply_email_masking(raw_email)
+            raw_email = clean_record["customer_email"]
+            clean_record["customer_email"] = self._apply_email_masking(raw_email)
             processed_records.append(clean_record)
         
         return processed_records
@@ -64,6 +64,7 @@ class DbStreamingRepository(BaseDataRepository):
         Simulasi menulis data transaksi yang sudah patuh privasi ke Delta Table Cloud Lakehouse.
         """
         print("   [DB-LOAD] Sukses mengamankan {len(clean_data)} baris data CDC ke Lakehouse....")
+        return True
     
     def _apply_email_masking(self, email: str) -> str:
         """
