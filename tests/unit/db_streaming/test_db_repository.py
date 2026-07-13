@@ -34,7 +34,7 @@ class TestDbStreamingRepository:
                 "order_id":88,
                 "amount": 8000.0,
                 "status": "FAILED",                # Harus bersih dari spasi & kapital
-                "customer_email": "i******@example.com"  # Karakter ke-2 dan seterusnya diganti bintang
+                "costumer_email": "a**********@gmail.com"  # Karakter ke-2 dan seterusnya diganti bintang
             }
         ]
 
