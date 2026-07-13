@@ -47,7 +47,7 @@ class TestDbStreamingRepository:
         Menguji ketahanan fungsi private _apply_email_masking jika menerima
         input string email yang tidak valid atau rusak dari database.
         """
-        repo = DbStreamingRepository(connection_string="postgresql://dummy_url")
+        repo = DbStreamingRepository(connection="postgresql://dummy_url")
         email_rusak = "bukan_email_valid_tanpa_at"
         ekspektasi_fallback = "masked_user@hidden.com"
         # Memanggil fungsi private menggunakan nama aslinya
