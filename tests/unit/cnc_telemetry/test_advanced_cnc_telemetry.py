@@ -9,7 +9,7 @@ class TestAdvancedCncRepository:
         """
         repo = AdvancedCncRepository("CNC-ADV-01", 50.0)
         # Fokus: Memastikan fungsi pembacaan mengembalikan angka yang benar
-        assert repo.anomaly_threshold == 50.0
+        assert repo.anomaly_treshold == 50.0
     
     def test_jalur_setter_harus_bisa_mengubah_dan_menimpa_nilai_dengan_data_baru(self):
         """
@@ -18,9 +18,9 @@ class TestAdvancedCncRepository:
         """
         repo = AdvancedCncRepository("CNC-ADV-02", 50.0)
         # AKTIVITAS 1: Memicu fungsi Setter untuk menimpa memori (50.0 -> 65.5)
-        repo.anomaly_threshold = 65.5 
+        repo.anomaly_treshold = 65.5 
         # AKTIVITAS 2: Memastikan nilai di dalam memori baru memang sudah berubah
-        assert repo.anomaly_threshold == 65.5
+        assert repo.anomaly_treshold == 65.5
     
     def test_gerbang_validasi_setter_wajib_menolak_dan_melempar_error_jika_angka_ekstrem(self):
         """
@@ -48,4 +48,4 @@ class TestAdvancedCncRepository:
         with pytest.raises(TypeError) as info_error:
             repo.anomaly_treshold = "DELAPAN PULUH DELAPAN"
         # Memastikan pesan proteksi tipe data keluar dengan tepat
-        assert "harus berupa angka numeric" in str(info_error.value)
+        assert "harus berupa angka numerik" in str(info_error.value)
