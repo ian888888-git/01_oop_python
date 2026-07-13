@@ -1,0 +1,115 @@
+<?php
+// Versi PHP Native Jadul
+class RekeningBank {
+    private $saldo; // Tidak bisa diakses langsung dari luar
+
+    public function __construct($saldoAwal) {
+        $this->saldo = $saldoAwal;
+    }
+
+    // GETTER: Fungsi manual untuk mengambil data
+    public function getSaldo() {
+        return $this->saldo;
+    }
+
+    // SETTER: Fungsi manual untuk mengubah data dengan validasi
+    public function setSaldo($uangBaru) {
+        if ($uangBaru < 0) {
+            die("Error: Uang tidak boleh minus!");
+        }
+        $this->saldo = $uangBaru;
+    }
+}
+
+// Cara pakainya di PHP (Wajib panggil kurung fungsi):
+$akun = new RekeningBank(1000);
+$akun->setSaldo(2000);       // Mengubah nilai
+echo $akun->getSaldo();      // Membaca nilai -> Output: 2000
+
+---------------------------------------
+# src/bank/rekening_bank.py
+
+class RekeningBank:
+    def __init__(self, saldo_awal: float):
+        # Double underscore (__) membuat variabel ini menjadi PRIVATE (Sifatnya seperti 'private $saldo' di PHP)
+        # Sistem luar tidak bisa mengakses langsung menggunakan perintah 'rekening.__saldo'
+        self.__saldo = float(saldo_awal)
+
+    # ==========================================
+    # 1. GERBANG GETTER (Membaca Data)
+    # ==========================================
+    @property
+    def saldo(self) -> float:
+        """
+        Bertindak seperti fungsi 'public function getSaldo()' di PHP.
+        Namun di Python, decorator @property menyulap fungsi ini agar bisa dipanggil 
+        seolah-olah seperti variabel properti biasa tanpa kurung ().
+        """
+        print("\n🔍 [KASIR] Sedang mengotentikasi dan menghitung saldo di brankas...")
+        return self.__saldo
+
+    # ==========================================
+    # 2. GERBANG SETTER (Mengubah Data + Validasi)
+    # ==========================================
+    @saldo.setter
+    def saldo(self, uang_baru: float):
+        """
+        Bertindak seperti fungsi 'public function setSaldo($uangBaru)' di PHP.
+        Dilengkapi dengan gerbang validasi ketat sebelum menyentuh variabel privat.
+        """
+        print(f"\n📥 [KASIR] Menerima permintaan perubahan saldo menjadi: Rp {uang_baru}")
+        
+        # Validasi 1: Pastikan inputnya adalah angka numerik
+        if not isinstance(uang_baru, (int, float)):
+            raise TypeError("❌ [VALIDASI GAGAL] Setoran harus berupa angka numerik!")
+            
+        # Validasi 2: Pastikan angka tidak minus (Hukum Bisnis Bank)
+        if uang_baru < 0:
+            raise ValueError("❌ [VALIDASI GAGAL] Nominal saldo tidak boleh minus!")
+        
+        # Jika lolos semua pemeriksaan, data privat baru diizinkan berubah
+        print("✅ [VALIDASI SUKSES] Logika aman. Nilai di dalam brankas resmi diperbarui.")
+        self.__saldo = float(uang_baru)
+-------------------------------------------
+# main.py
+# Kita impor kelasnya dari folder src.bank.rekening_bank
+from src.bank.rekening_bank import RekeningBank
+
+if __name__ == "__main__":
+    print("=== SIMULASI GERBANG GETTER & SETTER PYTHON ===")
+
+    # 1. Inisiasi Kelas (Membuat Objek Langsung dari Kelasnya, Bukan dari Turunan)
+    # Di PHP: $my_akun = new RekeningBank(500000);
+    my_akun = RekeningBank(saldo_awal=500000.0)
+    print("🏦 Akun bank berhasil dibuat dengan saldo awal Rp 500.000")
+
+
+    # 2. MENGUBAH DATA (Memicu Fungsi @saldo.setter)
+    # Di PHP: $my_akun->setSaldo(750000);
+    # Di Python: Cukup gunakan operator sama dengan (=) seperti variabel biasa!
+    my_akun.saldo = 750000.0
+
+
+    # 3. MEMBACA DATA (Memicu Fungsi @property / Getter)
+    # Di PHP: echo $my_akun->getSaldo();
+    # Di Python: Cukup panggil namanya langsung TANPA tanda kurung fungsi ()
+    print(f"💰 Saldo Saat Ini: Rp {my_akun.saldo}")
+
+
+    # 4. UJI COBA MENYUSUPKAN DATA ILEGAL (Membuktikan Satpam Validasi Bekerja)
+    print("\n🚨 Uji Coba Keamanan: Mencoba memasukkan nilai minus...")
+    try:
+        # Kode ini akan sengaja memicu ValueError pada fungsi setter
+        my_akun.saldo = -25000.0
+    except ValueError as e:
+        print(f"🛡️ Sistem Menolak Otomatis: {str(e)}")
+
+
+    print("\n🚨 Uji Coba Keamanan: Mencoba memasukkan tipe data teks...")
+    try:
+        # Kode ini akan sengaja memicu TypeError pada fungsi setter
+        my_akun.saldo = "DUA_JUTA"
+    except TypeError as e:
+        print(f"🛡️ Sistem Menolak Otomatis: {str(e)}")
+
+    print("\n=== SIMULASI SELESAI ===")
