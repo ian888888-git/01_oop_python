@@ -1,7 +1,7 @@
 import re 
 from src.base_data_repository import BaseDataRepository
 
-class DbStreamingRepository:
+class DbStreamingRepository(BaseDataRepository):
     """
     IMPLEMENTASI NYATA (Concrete Class) - Domain Database Streaming (CDC).
     Menangani standardisasi data tekstual dan enkapsulasi privasi (Data Masking).
