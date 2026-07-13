@@ -22,9 +22,9 @@ class AdvancedCncRepository(BaseDataRepository):
     def anomaly_treshold(self, new_value: float):
         """Gerbang mengubah nilai: Wajib melalui validasi logika pabrik."""
         if not isinstance(new_value, (int, float)):
-            raise TypeError("⚠️ [SECURITY ALERT] Nilai threshold harus berupa angka numerik!")
+            raise TypeError("[SECURITY ALERT] Nilai threshold harus berupa angka numerik!")
         if new_value < 0.0 or new_value > 100.0:
-            raise ValueError("⚠️ [SECURITY ALERT] Nilai threshold harus antara 0 sampai 100!")
+            raise ValueError("[SECURITY ALERT] Nilai threshold harus antara 0 sampai 100!")
         print(f"⚙️ [CONFIG UPDATE] Threshold mesin {self.machine_id} berhasil diubah ke: {new_value}°C")
         self.__anomaly_treshold = float(new_value)
     

@@ -34,7 +34,7 @@ class TestAdvancedCncRepository:
         with pytest.raises(ValueError) as info_error:
             repo.anomaly_treshold = 150.0
         # Memastikan teks pesan peringatan dari pabrik keluar dengan tepat
-        assert "di luar batas aman operasi" in str(info_error.value)
+        assert "Nilai threshold harus antara 0 sampai 100" in str(info_error.value)
 
     def test_gerbang_validasi_setter_wajib_menolak_dan_melempar_error_jika_tipe_data_bukan_numerik(self):
         """
