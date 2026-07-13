@@ -7,7 +7,7 @@ class TestAdvancedCncRepository:
         SUBSTANSI: Menguji sirkuit AKSES BACA (Getter / Cek Saldo).
         Memastikan sistem bisa menarik data dari brankas internal tanpa mengubahnya.
         """
-        repo = AdvancedCncRepository(machine_id="CNC-ADV-01", initial_threshold=50.0)
+        repo = AdvancedCncRepository("CNC-ADV-01", 50.0)
         # Fokus: Memastikan fungsi pembacaan mengembalikan angka yang benar
         assert repo.anomaly_threshold == 50.0
     
@@ -16,7 +16,7 @@ class TestAdvancedCncRepository:
         SUBSTANSI: Menguji sirkuit PROSES UPDATE (Setter / Setor Tunai).
         Memastikan variabel privat di memori berhasil ditimpa oleh angka baru yang lolos validasi.
         """
-        repo = AdvancedCncRepository(machine_id="CNC-ADV-02", initial_threshold=50.0)
+        repo = AdvancedCncRepository("CNC-ADV-02", 50.0)
         # AKTIVITAS 1: Memicu fungsi Setter untuk menimpa memori (50.0 -> 65.5)
         repo.anomaly_threshold = 65.5 
         # AKTIVITAS 2: Memastikan nilai di dalam memori baru memang sudah berubah
@@ -29,7 +29,7 @@ class TestAdvancedCncRepository:
         jika ada penyusup yang mencoba memasukkan angka di luar rentang aman (0 - 100°C).
         """
         # 1. Siapkan objek dengan batas normal awal
-        repo = AdvancedCncRepository(machine_id="CNC-ADV-03", initial_threshold=50.0)
+        repo = AdvancedCncRepository("CNC-ADV-03", 50.0)
         # 2. Uji batas atas: Mencoba menyusupkan suhu ekstrem 150.0°C (Harus Terblokir)
         with pytest.raiser(ValueError) as info_error:
             repo.anomaly_treshold = 150.0
@@ -43,7 +43,7 @@ class TestAdvancedCncRepository:
         input data selain angka (seperti String), mencegah kerusakan fatal pada perhitungan ETL.
         """
         # 1. Siapkan objek dengan batas normal awal
-        repo = AdvancedCncRepository(machine_id="CNC-ADV-04", initial_threshold=50.0)
+        repo = AdvancedCncRepository("CNC-ADV-04", 50.0)
         # 2. Uji tipe data: Mencoba memasukkan teks String (Harus Terblokir)
         with pytest.raises(TypeError) as info_error:
             repo.anomaly_treshold = "DELAPAN PULUH DELAPAN"
