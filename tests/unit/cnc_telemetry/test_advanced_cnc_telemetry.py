@@ -31,7 +31,7 @@ class TestAdvancedCncRepository:
         # 1. Siapkan objek dengan batas normal awal
         repo = AdvancedCncRepository("CNC-ADV-03", 50.0)
         # 2. Uji batas atas: Mencoba menyusupkan suhu ekstrem 150.0°C (Harus Terblokir)
-        with pytest.raiser(ValueError) as info_error:
+        with pytest.raises(ValueError) as info_error:
             repo.anomaly_treshold = 150.0
         # Memastikan teks pesan peringatan dari pabrik keluar dengan tepat
         assert "di luar batas aman operasi" in str(info_error.value)
