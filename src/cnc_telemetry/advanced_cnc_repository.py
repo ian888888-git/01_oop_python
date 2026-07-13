@@ -9,13 +9,13 @@ class AdvancedCncRepository(BaseDataRepository):
         self.machine_id = machine_id
         # Variabel internal di-hidden menggunakan double underscore (Private Attribute)
         # Tidak bisa diakses langsung dari luar sebagai .__anomaly_threshold
-        self.__anomaly_treshold = initial_treshold
+        self.__anomaly_treshold = float(initial_treshold)
     
     # --- 1. GERBANG GETTER ---
     @property
     def anomaly_treshold(self) -> float:
         """Gerbang membaca nilai: Mengembalikan nilai threshold privat."""
-        return self._anomaly_treshold
+        return self.__anomaly_treshold
 
     # --- 2. GERBANG SETTER ---
     @anomaly_treshold.setter
